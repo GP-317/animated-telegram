@@ -46,6 +46,7 @@ public class Interpreter {
         this.y = y;
         direction = initDirection;
         procedures = new HashMap();
+        
         SourceReader sr = new SourceReader(s);
 
         // récupère un exemple 'en dur' d'arbre syntaxique abstrait

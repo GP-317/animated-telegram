@@ -7,11 +7,20 @@ public class Parser {
 	private int pos;
     private int profondeur;
     private ArrayList<Token> tokens;
-
+    
+    
+/**
+ * Renvoie l'analyse du Node nécessaire dans l'interpréteur
+ * @param tokens un paramètre obtenu par le Lexer
+ * @return un objet de type Node contenant le résultat de l'analyse du Lexer
+ * @throws Exception
+ */
     public Node analyse(ArrayList<Token> tokens) throws Exception {
         this.tokens = tokens;
         pos = 0;
-        Node expr = S();
+        
+        Node expr = new Node(NodeClass.nBlock);
+        
         System.out.println("Fin atteinte = " + (pos == tokens.size()));
         return expr;
     }
@@ -144,7 +153,7 @@ public class Parser {
         return pos >= tokens.size();
     }
 
-    /*
+    /**
      * Retourne la classe du prochain token à lire
      * SANS AVANCER au token suivant
      */
@@ -156,7 +165,7 @@ public class Parser {
         }
     }
 
-    /*
+    /**
      * Retourne le prochain token à lire
      * ET AVANCE au token suivant
      */
