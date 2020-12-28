@@ -12,6 +12,7 @@ public class Interpreter {
     double x;
     double y;
     double direction;
+    String instructions;
 
     Graphics gc;
 
@@ -32,14 +33,20 @@ public class Interpreter {
         Color.WHITE,
         Color.YELLOW
     };
+    
+    
+
+    
 
     void interpreter(String s, double x, double y, Graphics gc) throws Exception {
         System.out.println();
+        this.instructions = s;
         this.gc = gc;
         this.x = x;
         this.y = y;
         direction = initDirection;
         procedures = new HashMap();
+        SourceReader sr = new SourceReader(s);
 
         // récupère un exemple 'en dur' d'arbre syntaxique abstrait
         // A FAIRE : remplacer par l'implémentation d'une analyse syntaxique descendante
@@ -62,6 +69,7 @@ public class Interpreter {
         }
     }
 
+    
     void eval(Node n) {
         Iterator<Node> it = n.getChildren();
         switch (n.getCl()) {
@@ -86,6 +94,15 @@ public class Interpreter {
                     eval(nodeToRepeat);
                 }
                 break;
+            case nCall :
+            	evalRoot(n);
+            	break;
+            case nColor :
+            	String s = n.getValue();
+            	int index = Integer.parseInt(s);
+            	gc.setColor(colors[index]);
+                break;
+                
             // A FAIRE : implémenter l'interprétation des noeuds nCall et nColor
         }
     }
@@ -108,7 +125,9 @@ public class Interpreter {
             printAst(children.next(), depth + 1);
         }
     }
+   
 
+    
     static Node exampleAst() {
         Node root = new Node(NodeClass.nBlock);
 
@@ -134,4 +153,8 @@ public class Interpreter {
 
         return root;
     }
+    
+    
+    
+    
 }
