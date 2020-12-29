@@ -14,25 +14,25 @@ public class Main {
     final String fontName = "verdana";
     final int fontSize = 16;
 
-    /*
-    final String example =
-        "color 1\n" +
-        "forward 20\n" +
-        "right 90\n" +
-        "forward 20\n" +
-        "color 5\n" +
-        "left 90\n" +
-        "forward 20\n" +
-        "right 90\n" +
-        "forward 20\n" +
-        "color 11\n" +
-        "forward 20\n" +
-        "color 8\n" +
-        "repeat 4 [\n" +
-        "  forward 15\n" +
-        "  left 90\n" +
-        "]\n";
-    */
+    
+//    final String example =
+//        "color 1\n" +
+//        "forward 20\n" +
+//        "right 90\n" +
+//        "forward 20\n" +
+//        "color 5\n" +
+//        "left 90\n" +
+//        "forward 20\n" +
+//        "right 90\n" +
+//        "forward 20\n" +
+//        "color 11\n" +
+//        "forward 20\n" +
+//        "color 8\n" +
+//        "repeat 4 [\n" +
+//        "  forward 15\n" +
+//        "  left 90\n" +
+//        "]\n";
+    
 
     final static String example =
         "procedure p1 [\n" +
