@@ -48,14 +48,25 @@ public class Interpreter {
         procedures = new HashMap();
         
         SourceReader sr = new SourceReader(s);
+        
+        
+        Lexer lexer = new Lexer();
+        Parser parser = new Parser();
+        
+        evalRoot(parser.analyse(lexer.lexer(sr)));
 
         // récupère un exemple 'en dur' d'arbre syntaxique abstrait
         // A FAIRE : remplacer par l'implémentation d'une analyse syntaxique descendante
+        
+        
+        /*
+        
         Node root = exampleAst();
 
         System.out.println("Arbre syntaxique abstrait :");
         printAst(root, 0);
         evalRoot(root);
+        */
     }
 
     void evalRoot(Node root) {

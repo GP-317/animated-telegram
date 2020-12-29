@@ -21,127 +21,242 @@ public class Parser {
         
         Node expr = new Node(NodeClass.nBlock);
         
-        System.out.println("Fin atteinte = " + (pos == tokens.size()));
+        while(!isEOF())
+        {
+        	Token token = getToken();
+        	switch(token.getCl())
+        	{
+        	
+        	case tProc :
+        		expr.appendNode(tProc(token));
+        		break;
+        		
+        	case tForward :
+        		expr.appendNode(tForward(token));
+        		break;
+        		
+        	case tLeft :
+        		expr.appendNode(tLeft(token));
+        		break;
+        		
+        	case tRight :
+        		expr.appendNode(tRight(token));
+        		break;
+        		
+        	case tColor :
+        		expr.appendNode(tColor(token));
+        		break;
+        		
+        	case tRepeat :
+        		expr.appendNode(tRepeat(token));
+        		break;
+        		
+        	case tCall :
+        		expr.appendNode(tCall(token));
+        		break;
+        		
+        	default :
+        		throw new Exception("Erreur de lecture - Mauvais token enregistré lors de l'analyse");
+        	}
+        	
+        }
+        
+        //System.out.println("Fin atteinte = " + (pos == tokens.size()));
         return expr;
     }
 
+    
+    
+    
+    
     /*
 
     méthodes des symboles non terminaux
 
-      */
-
-    private Node S() throws Exception {
-
-        if (getTokenClass() == TokenClass.intVal ||
-                getTokenClass() == TokenClass.leftPar) {
-
-            // production S -> AS'
-
-            profondeur++;
-            Node n1 = A();
-            profondeur--;
-            Node n2 = S_prime();
-            if (n2 != null) {
-                n2.prepend(n1);
-                return n2;
-            } else {
-                return n1;
-            }
-        }
-        throw new Exception("intVal ou ( attendu");
+    */
+    
+    
+    public String ident(Token t)
+    {
+    	return t.getValue();
+    }
+    
+    
+    public String intVal(Token t)
+    {
+    	return t.getValue();
     }
 
-    private Node S_prime() throws Exception {
-
-        if (getTokenClass() == TokenClass.add) {
-
-            // production S' -> +S
-
-            Token t = getToken();
-            printNode("+");
-            profondeur++;
-            Node n = new Node(t);
-            n.append(S());
-            profondeur--;
-            return n;
-        }
-
-        if (getTokenClass() == TokenClass.rightPar || isEOF()) {
-
-            // production S' -> epsilon
-
-            return null;
-        }
-
-        throw new Exception("+ ou ) attendu");
+    
+    /**
+     * Classe illustrant les tokens utilisables lors de l'écriture d'une procédure
+     * @param token, une procédure
+     * @return un objet Node contenant toute la procédure
+     * @throws Exception 
+     */
+    public Node bracketOpened(Token token) throws Exception
+    {
+    	Node node = new Node(NodeClass.nBlock);
+    	
+    	while(!isEOF())
+    	{
+    		Token tbis = getToken();
+    		
+    		if(tbis.getCl() == TokenClass.tForward)
+    		{
+    			node.appendNode(tForward(tbis));
+    		}
+    		
+    		else if(tbis.getCl() == TokenClass.tLeft)
+    		{
+    			node.appendNode(tLeft(tbis));
+    		}
+    		
+    		else if(tbis.getCl() == TokenClass.tRight)
+    		{
+    			node.appendNode(tRight(tbis));
+    		}
+    		
+    		else if(tbis.getCl() == TokenClass.tColor)
+    		{
+    			node.appendNode(tColor(tbis));
+    		}
+    		
+    		else if(tbis.getCl() == TokenClass.tRepeat)
+    		{
+    			node.appendNode(tRepeat(tbis));
+    		}
+    		
+    		else if(tbis.getCl() == TokenClass.tCall)
+    		{
+    			node.appendNode(tCall(tbis));
+    		}
+    		
+    		else if(tbis.getCl() == TokenClass.closeBracket)
+    		{
+    			return node;
+    		}
+    		
+    		else
+    		{
+    			throw new Exception("Erreur de lecture - Mauvais Token enregistré lors de l'analyse");
+    		}
+    	}
+    	
+		throw new Exception("Erreur de lecture - Bloc d'instructions non clos");
+    	
     }
-
-    private Node A() throws Exception {
-
-        if (getTokenClass() == TokenClass.leftPar) {
-
-            // production A -> ( S ) A'
-
-            getToken();
-            profondeur++;
-            Node n1 = S();
-            profondeur--;
-            if (getTokenClass() == TokenClass.rightPar) {
-                getToken();
-                Node n2 = A_prime();
-                if (n2 != null) {
-                    n2.prepend(n1);
-                    return n2;
-                } else {
-                    return n1;
-                }
-            }
-            throw new Exception(") attendu");
-        }
-
-        if (getTokenClass() == TokenClass.intVal) {
-
-            // production A -> intVal A'
-
-            Token tokIntVal = getToken();
-            printNode(tokIntVal.getValue()); // affiche la valeur int
-            Node n1 = new Node(tokIntVal);
-            Node n2 = A_prime();
-            if (n2 != null) {
-                n2.prepend(n1);
-                return n2;
-            } else {
-                return n1;
-            }
-        }
-
-        throw new Exception("intVal ou ( attendu");
+    
+    
+    public Node tProc(Token token) throws Exception
+    {
+    	
+    	if(getTokenClass() == TokenClass.ident)
+    	{
+    		Node proc = new Node(NodeClass.nProc, ident(getToken()));
+    		if(getTokenClass() == TokenClass.openBracket)
+    		{
+    			proc.appendNode(bracketOpened(getToken()));
+    		}
+    		
+    		return proc;
+    	}
+    	else
+    	{
+    		throw new Exception("Token ident attendu pour instruction Procédure attribuée");
+    	}
     }
-
-    private Node A_prime() throws Exception {
-        if (getTokenClass() == TokenClass.multiply) {
-
-            // production A' -> * A
-
-            Token t = getToken();
-            printNode("*");
-            Node n = new Node(t);
-            n.append(A());
-            return n;
-        }
-
-        if (getTokenClass() == TokenClass.add ||
-                getTokenClass() == TokenClass.rightPar ||
-                isEOF()) {
-
-            // production A' -> epsilon
-
-            return null;
-        }
-        throw new Exception("* + ou ) attendu");
-
+    
+    
+    public Node tForward(Token token) throws Exception
+    {
+    	if(getTokenClass() == TokenClass.intVal)
+    	{
+    		return new Node(NodeClass.nForward, intVal(getToken()));
+    	}
+    	else
+    	{
+    		throw new Exception("Token intVal attendu pour instruction Forward attribuée");
+    	}
     }
+    
+    
+    public Node tLeft(Token token) throws Exception
+    {
+    	if(getTokenClass() == TokenClass.intVal)
+    	{
+    		return new Node(NodeClass.nLeft, intVal(getToken()));
+    	}
+    	else
+    	{
+    		throw new Exception("Token intVal attendu pour instruction Left attribuée");
+    	}
+    }
+    
+    
+    public Node tRight(Token token) throws Exception
+    {
+    	if(getTokenClass() == TokenClass.intVal)
+    	{
+    		return new Node(NodeClass.nRight, intVal(getToken()));
+    	}
+    	
+    	else
+    	{
+    		throw new Exception("Token intVal attendu pour instruction Right attribuée");
+    	}
+    }
+    
+    
+    public Node tColor(Token token) throws Exception
+    {
+    	if(getTokenClass() == TokenClass.intVal)
+    	{
+    		return new Node(NodeClass.nColor, intVal(getToken()));
+    	}
+    	else
+    	{
+    		throw new Exception("Token intVal attendu pour instruction Color attribuée");
+    	}
+    }
+    
+    
+    public Node tRepeat(Token token) throws Exception
+    {
+    	if(getTokenClass() == TokenClass.intVal)
+    	{
+    		Node node = new Node(NodeClass.nRepeat, intVal(getToken()));
+    		
+    		if(getTokenClass() == TokenClass.openBracket)
+    		{
+    			node.appendNode(bracketOpened(getToken()));
+    		}
+    		return node;
+    	}
+    	else
+    	{
+    		throw new Exception("Token intVal ou [ attendu pour instruction Repeat attribuée");
+    	}
+    }
+    
+    
+    public Node tCall(Token token) throws Exception
+    {
+    	if(getTokenClass() == TokenClass.ident)
+    	{
+    		return new Node(NodeClass.nCall, ident(getToken()));
+    	}
+    	else
+    	{
+    		throw new Exception("Token ident attendu pour instruction Call attribuée");
+    	}
+    }
+    
+    
+    
+    
+    
+    
 
     /*
 
