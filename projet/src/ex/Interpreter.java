@@ -53,29 +53,29 @@ public class Interpreter {
         Lexer lexer = new Lexer();
         Parser parser = new Parser();
         
-        evalRoot(parser.analyse(lexer.lexer(sr)));
+        Node root = parser.analyse(lexer.lexer(sr));
+        
+        evalRoot(root);
 
         // récupère un exemple 'en dur' d'arbre syntaxique abstrait
         // A FAIRE : remplacer par l'implémentation d'une analyse syntaxique descendante
         
-        
-        /*
-        
-        Node root = exampleAst();
-
         System.out.println("Arbre syntaxique abstrait :");
         printAst(root, 0);
-        evalRoot(root);
-        */
     }
 
     void evalRoot(Node root) {
+    	
         Iterator<Node> it = root.getChildren();
+        
         while (it.hasNext()) {
+        	
             Node n = it.next();
             if (n.getCl() == NodeClass.nProc) {
                 procedures.put(n.getValue(), n);
-            } else {
+            } 
+            else 
+            {
                 eval(n);
             }
         }
@@ -85,20 +85,25 @@ public class Interpreter {
     void eval(Node n) {
         Iterator<Node> it = n.getChildren();
         switch (n.getCl()) {
+        
             case nBlock:
                 while (it.hasNext()) {
                     eval(it.next());
                 }
                 break;
+                
             case nForward:
                 forward(Integer.valueOf(n.getValue()));
                 break;
+                
             case nLeft:
                 direction = (direction + Integer.valueOf(n.getValue())) % 360;
                 break;
+                
             case nRight:
                 direction = (direction - Integer.valueOf(n.getValue())) % 360;
                 break;
+                
             case nRepeat:
                 int count = Integer.valueOf(n.getValue());
                 Node nodeToRepeat = it.next();
@@ -106,16 +111,23 @@ public class Interpreter {
                     eval(nodeToRepeat);
                 }
                 break;
+            
+                
+            // Impl�mentation de l'interpr�tation des noeuds nCall et nColor 
+                
+                
             case nCall :
-            	evalRoot(n);
+            	Node call = procedures.get(n.getValue()).getChildren().next();
+            	eval(call);
             	break;
+            	
             case nColor :
             	String s = n.getValue();
             	int index = Integer.parseInt(s);
             	gc.setColor(colors[index]);
                 break;
                 
-            // A FAIRE : implémenter l'interprétation des noeuds nCall et nColor
+            
         }
     }
 
@@ -127,6 +139,8 @@ public class Interpreter {
         y = destY;
     }
 
+    
+    
     static void printAst(Node n, int depth) {
         StringBuilder s = new StringBuilder();
         for(int i=0;i<depth;i++) s.append("  ");
@@ -136,6 +150,12 @@ public class Interpreter {
         while(children.hasNext()) {
             printAst(children.next(), depth + 1);
         }
+    }
+    
+    
+    static void printAld(Node n)
+    {
+    	
     }
    
 
