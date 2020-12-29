@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
 
 public class Main {
 
-    // dimension initiale de la fenÃªtre principale de l'application
+    // dimension initiale de la fenêtre principale de l'application
     final int height = 400;
     final int width = 700;
 
-    // police de caractÃ¨re de la zone de saisie
+    // police de caractère de la zone de saisie
     final String fontName = "verdana";
     final int fontSize = 16;
 
@@ -115,7 +115,7 @@ public class Main {
         msgLabelGridBagConstraints.weightx=1;
         bottomPanel.add(msgLabel, msgLabelGridBagConstraints);
 
-        // Gestion de l'interprÃ©teur
+        // Gestion de l'interpreteur
 
         btnRun.addActionListener(e -> {
             Dimension d = drawPanel.getSize();
@@ -134,9 +134,9 @@ public class Main {
             }
         });
 
-        // FenÃªtre principale
+        // Fenêtre principale
 
-        JFrame frame = new JFrame("DÃ©mo projet TLA 20-21");
+        JFrame frame = new JFrame("Projet TLA Onzekiz - Privard");
         frame.setPreferredSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

@@ -56,12 +56,7 @@ public class Interpreter {
         Node root = parser.analyse(lexer.lexer(sr));
         
         evalRoot(root);
-
-        // r√©cup√®re un exemple 'en dur' d'arbre syntaxique abstrait
-        // A FAIRE : remplacer par l'impl√©mentation d'une analyse syntaxique descendante
         
-        System.out.println("Arbre syntaxique abstrait :");
-        printAst(root, 0);
     }
 
     void evalRoot(Node root) {
@@ -115,12 +110,13 @@ public class Interpreter {
                 
             // ImplÈmentation de l'interprÈtation des noeuds nCall et nColor 
                 
-                
+                // Recupere les nodes presents dans la procedure relevee
             case nCall :
             	Node call = procedures.get(n.getValue()).getChildren().next();
             	eval(call);
             	break;
             	
+            // Extrait la valeur entiere de la chaine pour retrouver la couleur depuis l'index	
             case nColor :
             	String s = n.getValue();
             	int index = Integer.parseInt(s);
@@ -152,39 +148,34 @@ public class Interpreter {
         }
     }
     
-    
-    static void printAld(Node n)
-    {
-    	
-    }
    
 
     
-    static Node exampleAst() {
-        Node root = new Node(NodeClass.nBlock);
-
-        root.appendNode(new Node(NodeClass.nRight, "90"));
-
-        Node n1 = new Node(NodeClass.nBlock);
-        n1.appendNode(new Node(NodeClass.nForward, "40"));
-        n1.appendNode(new Node(NodeClass.nRight, "90"));
-        Node n11 = new Node(NodeClass.nRepeat, "3");
-        n11.appendNode(n1);
-        root.appendNode(n11);
-
-        root.appendNode(new Node(NodeClass.nForward, "50"));
-
-        // root.appendNode(new Node(NodeClass.nRight, "90"));
-
-        Node n2 = new Node(NodeClass.nBlock);
-        n2.appendNode(new Node(NodeClass.nLeft, "90"));
-        n2.appendNode(new Node(NodeClass.nForward, "20"));
-        Node n21 = new Node(NodeClass.nRepeat, "3");
-        n21.appendNode(n2);
-        root.appendNode(n21);
-
-        return root;
-    }
+//    static Node exampleAst() {
+//        Node root = new Node(NodeClass.nBlock);
+//
+//        root.appendNode(new Node(NodeClass.nRight, "90"));
+//
+//        Node n1 = new Node(NodeClass.nBlock);
+//        n1.appendNode(new Node(NodeClass.nForward, "40"));
+//        n1.appendNode(new Node(NodeClass.nRight, "90"));
+//        Node n11 = new Node(NodeClass.nRepeat, "3");
+//        n11.appendNode(n1);
+//        root.appendNode(n11);
+//
+//        root.appendNode(new Node(NodeClass.nForward, "50"));
+//
+//        // root.appendNode(new Node(NodeClass.nRight, "90"));
+//
+//        Node n2 = new Node(NodeClass.nBlock);
+//        n2.appendNode(new Node(NodeClass.nLeft, "90"));
+//        n2.appendNode(new Node(NodeClass.nForward, "20"));
+//        Node n21 = new Node(NodeClass.nRepeat, "3");
+//        n21.appendNode(n2);
+//        root.appendNode(n21);
+//
+//        return root;
+//    }
     
     
     

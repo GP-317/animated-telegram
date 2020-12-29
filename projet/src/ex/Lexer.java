@@ -7,7 +7,8 @@ import java.util.List;
 
 public class Lexer {
 	
-	
+	// Gère les différents modules dans une chaîne 
+	// pour que le programme les lise comme des espaces
 	static List<Character> WHITESPACE = Arrays.asList(' ', '\t', '\n', ',');
 	
 	static int ETAT_INITIAL = 0;
@@ -50,9 +51,12 @@ public class Lexer {
 		ArrayList<Token> tokens = new ArrayList<Token>();
 		input="";
 		int etat = ETAT_INITIAL;
+		
 		while (true) {
 			Character c = sr.lectureSymbole();
 			Integer e = transitions[etat][indiceSymbole(c)];
+			
+			System.out.println("Symbole " + c + " transition " + etat + " -> " + e);
 			
 			if (e == null) {
 				
@@ -87,7 +91,7 @@ public class Lexer {
 					
 					// System.out.println("Accepte [ " + buf);
 					tokens.add(new Token(TokenClass.openBracket, input));
-					sr.goBack();
+					//sr.goBack();
 					
 				} 
 				
@@ -96,7 +100,7 @@ public class Lexer {
 					
 					// System.out.println("Accepte [ " + buf);
 					tokens.add(new Token(TokenClass.closeBracket, input));
-					sr.goBack();
+					//sr.goBack();
 					
 				}
 				
@@ -148,6 +152,9 @@ public class Lexer {
 		}
 		return new Token(TokenClass.ident, input);
 	}
+	
+	
+
 	
 
 }

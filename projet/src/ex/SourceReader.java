@@ -16,7 +16,7 @@ public class SourceReader {
 	}
 
 	/**
-	 * Renvoie un caractÃ¨re ou null si fin de fichier
+	 * Renvoie un caractère ou null si fin de fichier
 	 * 
 	 */
 	public Character lectureSymbole() {
